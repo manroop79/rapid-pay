@@ -88,142 +88,12 @@ Client UI → Next.js API Routes → Service/Action Layer → Prisma → Postgre
 
 ---
 
-## Data Model (ERD)
-
-```mermaid
-erDiagram
-  User ||--o{ OnrampTransaction : "has many"
-  User ||--|| Balance : "has one"
-  User ||--o{ P2PTransfer : "sentTransfers"
-  User ||--o{ P2PTransfer : "receivedTransfers"
-
-  User {
-    String id PK
-    String email
-    String name
-    String number
-    String password
-  }
-
-  Balance {
-    String id PK
-    String userId FK
-    Int amount
-    Int locked
-  }
-
-  OnrampTransaction {
-    String id PK
-    String userId FK
-    String status  // success | failure | processing
-    String token
-    String provider
-    Int amount
-    DateTime startTime
-  }
-
-  P2PTransfer {
-    String id PK
-    String fromUserId FK
-    String toUserId FK
-    Int amount
-    DateTime timestamp
-  }
-```
-
----
-
-## Project Structure
-
-```
-on/                     # repo root folder
-├─ app/
-│  ├─ layout.tsx
-│  ├─ page.tsx
-│  ├─ auth/
-│  │  ├─ sign-in/
-│  │  └─ sign-up/
-│  ├─ api/
-│  │  ├─ home/
-│  │  ├─ user/
-│  │  ├─ onramp/            # e.g., start-callbacks, status webhooks (future)
-│  │  └─ p2p/               # e.g., /api/p2p/transfer
-│  ├─ components/
-│  │  ├─ TopBar.tsx
-│  │  ├─ Sidebar.tsx
-│  │  ├─ BalanceCard.tsx
-│  │  ├─ AddMoneyCard.tsx
-│  │  └─ OnRampTransactionCard.tsx
-│  └─ transfer/
-│     └─ page.tsx
-├─ lib/
-│  ├─ auth.ts
-│  ├─ prisma.ts
-│  └─ actions/
-│     ├─ onramp.ts
-│     └─ p2p-transfer.ts
-├─ prisma/
-│  └─ schema.prisma
-├─ public/
-│  └─ readme/
-│     ├─ dashboard.png
-│     ├─ transfer.png
-│     └─ transactions.png
-├─ .env.example
-├─ package.json
-└─ README.md
-```
-
----
-
-## Environment Variables
-
-Create `.env` from the example below:
-
-```bash
-# Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/rapidpay?schema=public"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="replace-with-strong-secret"
-
-# GitHub OAuth (if used)
-GITHUB_ID="your_github_oauth_client_id"
-GITHUB_SECRET="your_github_oauth_client_secret"
-```
-
-> **Note:** You already configured GitHub credentials and NextAuth secret/URL earlier.
-
----
-
 ## Getting Started
 
 ### 1) Prerequisites
 - Node.js 18+
 - pnpm / npm / yarn
 - PostgreSQL 14+ (or Docker)
-
-**Docker (recommended):**
-```yaml
-# docker-compose.yml
-services:
-  db:
-    image: postgres:15
-    container_name: rapidpay-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: rapidpay
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-volumes:
-  db_data:
-```
-```bash
-docker compose up -d
 ```
 
 ### 2) Install deps
@@ -328,31 +198,16 @@ pnpm start
 
 ---
 
-## UI & Styling
-
-- **Components**: TopBar (auth‑aware), Sidebar (Home/Transfer/Transactions), BalanceCard, AddMoneyCard, OnRampTransactionCard
-- **Design**: Royal Blue / Silver / Light Beige  
-  - `--brand-blue: #1f3aa6;`
-  - `--brand-silver: #c0c7d1;`
-  - `--brand-beige: #f6f1ea;`
-- **Guidelines**: Minimal, accessible, responsive
-
----
 
 ## Accessibility & Performance
 - Semantic HTML for cards, lists, and buttons
 - Focus states & keyboard navigation
 - Avoid large client bundles; prefer server components where possible
-- Image optimization via `next/image` (if/when images exist)
 
 ---
 
 ## Testing
 - **Unit**: Jest + React Testing Library (components & actions)
-- **E2E**: Playwright (auth happy path, add money, P2P transfer)
-- **DB**: Use a test schema or a Dockerized ephemeral Postgres in CI
-
-*(Add configuration files as you enable tests.)*
 
 ---
 
@@ -361,36 +216,7 @@ pnpm start
 - Validate/limit amounts server‑side; never trust client input
 - Protect API routes with session checks (`NextAuth`)
 - Log and verify provider callbacks for on‑ramp
-- Planned: **WSTG** test passes (Burp Suite Pro) for each route
-
 ---
 
-## Roadmap
-- [ ] Provider webhook endpoints for on‑ramp confirmations
-- [ ] On‑ramp receipt & detailed status timeline
-- [ ] Pagination & filters for transactions
-- [ ] Rate‑limit transfer endpoint
-- [ ] Add notifications/toasts for key actions
-- [ ] CI (GitHub Actions) with lint, typecheck, and Playwright
-- [ ] Dockerfile & one‑command `docker compose up`
 
----
-
-## Contributing
-This is a personal project. PRs are welcome for bug fixes, docs, or minor improvements.  
-1) Fork → 2) Create feature branch → 3) PR with a clear description.
-
----
-
-## License
-**MIT** — free to use, modify, and distribute.
-
----
-
-## Repo Visibility (Private/Public)
-You can toggle visibility in **GitHub → Repository → Settings → Danger Zone → Change repository visibility**.  
-- **Private**: Only you/collaborators can view.  
-- **Public**: Visible to everyone (good for portfolio/demo).
-
----
 
