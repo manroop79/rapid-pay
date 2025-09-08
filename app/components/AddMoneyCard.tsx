@@ -109,9 +109,10 @@ placeholder="Choose a bank"
 />
 </div>
 
-<Button type="submit" className="w-full" disabled={isPending} variant="brand" glow>
+<Button type="submit" className="w-full hover:bg-emerald-800" disabled={isPending} variant="brand" glow>
 {isPending ? "Processing..." : "Add Money"}
 </Button>
+
 </form>
 </CardContent>
 </Card>
