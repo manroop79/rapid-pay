@@ -22,7 +22,7 @@ const fmt = (d: string) => new Date(d).toLocaleString("en-IN", { dateStyle: "med
 return (
 <Card className="glass border-zinc-800">
 <CardHeader>
-<CardTitle className="text-emerald-300">Recent Transactions</CardTitle>
+<CardTitle className="text-emerald-300 text-center">Recent Transactions</CardTitle>
 </CardHeader>
 <CardContent>
 {transactions.length === 0 ? (

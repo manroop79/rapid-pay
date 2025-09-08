@@ -46,9 +46,16 @@ const handleMoneyAdded = (amt: number) => setUnlockedBalance(prev => (prev ?? 0)
 
 return (
 <div className="space-y-10">
-<section className="text-center space-y-2">
-<h1 className="text-4xl font-light">Your <span className="text-emerald-400">Balance</span></h1>
-<p className="text-zinc-400">Check your account balance, add money, and view recent transactions.</p>
+<section className="text-center space-y-3">
+<h1 className="text-4xl md:text-5xl font-light tracking-tight">
+Your{" "}
+<span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+Balance
+</span>
+</h1>
+<p className="text-sm md:text-base text-zinc-400">
+Check your account balance, add money, and view recent transactions.
+</p>
 </section>
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

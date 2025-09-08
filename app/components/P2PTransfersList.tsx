@@ -22,7 +22,7 @@ const money = (n: number) => `₹ ${n.toLocaleString("en-IN")}`;
 return (
 <Card className="glass border-zinc-800">
 <CardHeader>
-<CardTitle className="text-emerald-300">Recent P2P Transfers</CardTitle>
+<CardTitle className="text-emerald-300 text-center">Recent P2P Transfers</CardTitle>
 </CardHeader>
 <CardContent>
 {transactions.length === 0 ? (

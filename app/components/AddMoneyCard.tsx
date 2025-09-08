@@ -3,16 +3,16 @@
 import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import BankPicker, { Bank } from "./BankSelector";
 
 interface AddMoneyCardProps {
-onMoneyAdded: (amount: number) => void;
-onTransactionAdded: () => void;
+  onMoneyAdded: (amount: number) => void;
+  onTransactionAdded: () => void;
 }
 
-const BANKS = [
+const BANKS: Bank[] = [
 { name: "HDFC Bank", redirectUrl: "https://netbanking.hdfcbank.com" },
 { name: "Axis Bank", redirectUrl: "https://www.axisbank.com/" },
 ];
@@ -27,8 +27,12 @@ const handleTransfer = (e: React.FormEvent) => {
 e.preventDefault();
 
 const value = parseFloat(amount);
-if (isNaN(value) || value <= 0) return toast({ description: "Enter a valid amount.", variant: "destructive" });
-if (!bank) return toast({ description: "Please select a bank.", variant: "destructive" });
+if (isNaN(value) || value <= 0) {
+return toast({ description: "Enter a valid amount.", variant: "destructive" });
+}
+if (!bank) {
+return toast({ description: "Please select a bank.", variant: "destructive" });
+}
 
 startTransition(async () => {
 try {
@@ -41,12 +45,17 @@ body: JSON.stringify({ amount: value }),
 const data = await res.json();
 
 if (!res.ok) {
-toast({ title: "Failed", description: data.message ?? "Could not add money.", variant: "destructive" });
+toast({
+title: "Failed",
+description: data.message ?? "Could not add money.",
+variant: "destructive",
+});
 return;
 }
 
 onMoneyAdded(value);
 setAmount("");
+
 const log = await fetch("/api/user/create-transactions", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
@@ -57,7 +66,7 @@ body: JSON.stringify({ amount: value, provider: bank }),
 if (log.ok) {
 onTransactionAdded();
 toast({ title: "Success", description: "Money added and transaction recorded." });
-const redirect = BANKS.find(b => b.name === bank)?.redirectUrl ?? "/";
+const redirect = BANKS.find((b) => b.name === bank)?.redirectUrl ?? "/";
 setTimeout(() => (window.location.href = redirect), 900);
 } else {
 toast({ description: "Added balance, but failed to record transaction.", variant: "destructive" });
@@ -82,7 +91,7 @@ id="amount"
 type="number"
 inputMode="numeric"
 value={amount}
-onChange={e => setAmount(e.target.value)}
+onChange={(e) => setAmount(e.target.value)}
 placeholder="₹ e.g. 5000"
 className="mt-1"
 required
@@ -91,19 +100,16 @@ required
 
 <div>
 <label className="text-sm text-zinc-300">Select Bank</label>
-<Select onValueChange={setBank} value={bank}>
-<SelectTrigger className="mt-1">
-<SelectValue placeholder="Choose a bank" />
-</SelectTrigger>
-<SelectContent>
-{BANKS.map(b => (
-<SelectItem key={b.name} value={b.name}>{b.name}</SelectItem>
-))}
-</SelectContent>
-</Select>
+<BankPicker
+banks={BANKS}
+value={bank}
+onChange={setBank}
+className="mt-1"
+placeholder="Choose a bank"
+/>
 </div>
 
-<Button type="submit" className="w-full" disabled={isPending}>
+<Button type="submit" className="w-full" disabled={isPending} variant="brand" glow>
 {isPending ? "Processing..." : "Add Money"}
 </Button>
 </form>

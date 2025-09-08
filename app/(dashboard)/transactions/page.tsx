@@ -79,8 +79,11 @@ export default function TransactionsPage() {
   return (
     <div className="space-y-8">
       <section className="text-center space-y-2">
-        <h1 className="text-4xl font-light">
-          Your <span className="text-emerald-400">Transactions</span>
+        <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+          Your{" "}
+          <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+            Transactions
+          </span>
         </h1>
         <p className="text-zinc-400">Browse on-ramp and P2P history.</p>
       </section>
