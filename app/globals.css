@@ -2,26 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* App background */
+:root { color-scheme: dark; }
+html, body { height: 100%; }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    @apply bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-900 text-zinc-100 antialiased;
 }
 
+.bg-grid {
+    background-image:
+    linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 36px 36px;
+    }
+    
+
+/* Shadcn radix animations */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .glass {
+        @apply bg-zinc-900/40 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/40;
+    }
 }
+
+/* Your accent scan line (sidebar edge) */
+@keyframes light-flow {
+    0% { transform: translateY(100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+}
+
+.animate-light-flow { animation: light-flow 6s ease-in-out infinite; }
+
+.card-hover { @apply transition hover:shadow-lg hover:shadow-emerald-500/20 hover:border-emerald-500/40; }

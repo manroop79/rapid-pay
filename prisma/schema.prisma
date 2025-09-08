@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(sequence())
+  email       String?  @unique
+  name        String? 
+  password    String
+  accounts    Account[]
+  sessions    Session[]
+  OnRampTransaction   OnRampTransaction[]
+  Balance       Balance[]
+  sentTransfers P2PTransfer[] @relation("Sender")
+  receivedTransfers P2PTransfer[] @relation("Receiver")
+}
+
+// Used to manage multiple sign-in methods for users
+model Account {
+  id          Int      @id @default(sequence())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider    String
+  providerAccountId   String
+  type        String
+  access_token    String?
+  refresh_token   String?
+  expires_at  Int?
+  token_type   String?
+  scope       String?
+  id_token    String?
+  session_State   String?
+
+  @@unique([provider, providerAccountId])
+}
+
+// Stores session information for users. When a user logs in, a session is created and referenced here.
+model Session {
+  id      Int     @id @default(sequence())
+  sessionToken  String    @unique
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+  expires DateTime
+}
+
+// Used for email verification (for passwordless sign-in or account confirmation)
+model VerificationToken {
+  identifier    String
+  token         String    @unique
+  expires       DateTime
+
+  @@unique([identifier, token])
+}
+
+model OnRampTransaction {
+  id          Int      @id @default(sequence())
+  status      OnRampStatus
+  token       String   @unique
+  provider    String
+  amount      Int
+  startTime   DateTime
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+}
+
+model Balance {
+  id          Int      @id @default(sequence())
+  userId      Int      @unique
+  amount      Int
+  locked      Int       @default(0)
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model P2PTransfer {
+  id          Int      @id @default(sequence())
+  amount      Float
+  timestamp   DateTime @default(now())
+  fromUser    User     @relation(name: "Sender", fields: [fromUserId], references: [id])
+  fromUserId  Int
+  toUser      User     @relation(name: "Receiver", fields: [toUserId], references: [id])
+  toUserId    Int
+}
+
+enum AuthType {  // just to give named types
+  Google
+  Github
+}
+
+enum OnRampStatus {
+  Success
+  Failure
+  Processing
+}

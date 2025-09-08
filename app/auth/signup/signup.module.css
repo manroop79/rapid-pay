@@ -1,0 +1,76 @@
+/* Center the form on the page */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column; /* Add this to stack the elements vertically */
+}
+
+/* Style the form container */
+.formContainer {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Style the form */
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the input fields */
+.formContainer .input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0; /* Reduce the margin to decrease space between input fields */
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Style the button */
+.formContainer .button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0070f3;
+    color: white;
+    cursor: pointer; /* Add pointer cursor */
+}
+
+.formContainer .button:hover {
+    background-color: #005bb5;
+}
+
+/* Style the error message */
+.formContainer .error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* Style the success message */
+.formContainer .success {
+    color: green;
+    margin-bottom: 10px;
+}
+
+/* Style the sign-in link */
+.formContainer .signinLink {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.formContainer .signinLink a {
+    color: #0070f3;
+    cursor: pointer; /* Add pointer cursor */
+}
+
+.formContainer .signinLink a:hover {
+    text-decoration: underline;
+}

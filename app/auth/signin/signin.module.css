@@ -1,0 +1,86 @@
+/* Center the form on the page */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column; /* Add this to stack the elements vertically */
+}
+
+/* Style the form container */
+.formContainer {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Style the form */
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the input fields */
+.formContainer .input {
+    width: 100%;
+    padding: 8px;
+    /* margin: 2px 0; */
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Style the button */
+.formContainer .button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0070f3;
+    color: white;
+    cursor: pointer; /* Add pointer cursor */
+}
+
+.formContainer .button:hover {
+    background-color: #005bb5;
+}
+
+/* Style the error message */
+.formContainer .error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* Style the alternative sign-in options */
+.formContainer .alternativeSignin {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.formContainer .alternativeSignin .button {
+    background-color: #333;
+    margin-top: 10px;
+    cursor: pointer; /* Add pointer cursor */
+}
+
+.formContainer .alternativeSignin .button:hover {
+    background-color: #555;
+}
+
+/* Style the sign-up link */
+.formContainer .signupLink {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.formContainer .signupLink a {
+    color: #0070f3;
+    cursor: pointer; /* Add pointer cursor */
+}
+
+.formContainer .signupLink a:hover {
+    text-decoration: underline;
+}
