@@ -6,7 +6,6 @@
 ![Prisma](https://img.shields.io/badge/Prisma-ORM-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
 ![Auth](https://img.shields.io/badge/Auth-NextAuth.js-green)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
