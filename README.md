@@ -1,36 +1,222 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RapidPay — Modern Online Banking App (Next.js, Prisma, PostgreSQL)
+
+> A clean, modern “online banking” demo with on‑ramp deposits, P2P transfers, balances, and transaction history — built with **Next.js 14**, **TypeScript**, **Tailwind CSS**, **Prisma**, and **PostgreSQL**.
+
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+![Auth](https://img.shields.io/badge/Auth-NextAuth.js-green)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [System Architecture](#system-architecture)
+- [Data Model (ERD)](#data-model-erd)
+- [Project Structure](#project-structure)
+- [Environment Variables](#environment-variables)
+- [Getting Started](#getting-started)
+- [Scripts](#scripts)
+- [Core Flows](#core-flows)
+- [API Reference](#api-reference)
+- [UI & Styling](#ui--styling)
+- [Accessibility & Performance](#accessibility--performance)
+- [Testing](#testing)
+- [Security Notes](#security-notes)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Repo Visibility (Private/Public)](#repo-visibility-privatepublic)
+
+---
+
+## Overview
+**RapidPay** is a full‑stack banking demo that mirrors real‑world money app flows:
+- Add money (on‑ramp) via supported providers
+- Peer‑to‑Peer transfers by **recipient name**
+- Live balance with locked amounts for in‑flight operations
+- Transaction history with statuses
+
+The app is responsive across all screen sizes and uses a clean, minimal design.
+
+---
+
+## Screenshots
+
+> Replace these with real screenshots when ready. Files live under `public/readme/`.
+
+![Dashboard](./public/readme/dashboard.png)
+![Transfer](./public/readme/transfer.png)
+![Transactions](./public/readme/transactions.png)
+
+---
+
+## Features
+- 🔐 **Auth**: NextAuth (GitHub OAuth; email/password optional)
+- 🏦 **Balance & Locking**: Safe updates with Prisma transactions
+- 💳 **On‑Ramp**: Start → processing → success/failure statuses
+- 🔁 **P2P Transfers**: Send money using recipient **name** (unique constraint recommended)
+- 📜 **Transactions**: On‑ramp + P2P history
+- 🧱 **Components**: Top bar (session‑aware), Sidebar (Home/Transfer/Transactions), Balance card, Transfer form, OnRampTransaction card
+- 📱 **Responsive**: Mobile‑first layout
+
+---
+
+## Tech Stack
+- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, shadcn/ui
+- **Auth**: NextAuth.js (GitHub provider configured)
+- **ORM & DB**: Prisma + PostgreSQL
+- **Runtime**: Node.js 18+
+
+---
+
+## System Architecture
+- **Client** renders pages/components → calls **/api** routes
+- **API** routes validate input & call **services** in `/lib/actions`
+- **Services** use **Prisma** to read/write PostgreSQL within **transactions**
+- **NextAuth** manages session & providers
+- **UI** reads server data via server components/server actions where appropriate
+
+```
+Client UI → Next.js API Routes → Service/Action Layer → Prisma → PostgreSQL
+                           ↘ NextAuth (session & OAuth)
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1) Prerequisites
+- Node.js 18+
+- pnpm / npm / yarn
+- PostgreSQL 14+ (or Docker)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2) Install deps
+```bash
+pnpm install
+# or npm install / yarn
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3) Prisma init & migrate
+```bash
+pnpm prisma generate
+pnpm prisma migrate dev --name init
+# Optional: pnpm prisma studio
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> **Seeding:** You opted not to maintain a `seed.ts`. If needed later, add one under `prisma/seed.ts` and run `pnpm prisma db seed`.
 
-## Learn More
+### 4) Run dev
+```bash
+pnpm dev
+# open http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 5) Build & start (production)
+```bash
+pnpm build
+pnpm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  }
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Core Flows
+
+### 1) Add Money (On‑Ramp)
+- User selects a provider in **AddMoneyCard**
+- Backend creates an `OnrampTransaction` with `processing` status and a `token`
+- Provider/webhook (future) confirms → status becomes `success` or `failure`
+- On success: increase `Balance.amount` & clear `locked` if applicable
+
+### 2) P2P Transfer
+- Inputs: **recipient name** and **amount**
+- Validate sender balance (consider `locked`)
+- Run a **Prisma transaction**:
+  - Decrement sender `Balance.amount`
+  - Increment recipient `Balance.amount`
+  - Insert `P2PTransfer`
+- Return updated balances
+
+### 3) Transactions View
+- List `OnrampTransaction` + `P2PTransfer`
+- Outbound vs inbound styling; show amounts and timestamps
+
+---
+
+## API Reference
+
+> Endpoints may change; keep this section aligned with your `/app/api` routes.
+
+### `POST /api/onramp/start`
+**Body**
+```json
+{ "provider": "bankX", "amount": 5000 }
+```
+**Response**
+```json
+{ "transactionId": "txn_123", "status": "processing", "token": "abc123" }
+```
+
+### `POST /api/p2p/transfer`
+**Body**
+```json
+{ "toName": "Alice", "amount": 1200 }
+```
+**Response**
+```json
+{ "ok": true, "transferId": "tr_456", "balance": { "amount": 8800, "locked": 0 } }
+```
+
+### `GET /api/user/balance`
+**Response**
+```json
+{ "amount": 10000, "locked": 0 }
+```
+
+---
+
+
+## Accessibility & Performance
+- Semantic HTML for cards, lists, and buttons
+- Focus states & keyboard navigation
+- Avoid large client bundles; prefer server components where possible
+
+---
+
+## Testing
+- **Unit**: Jest + React Testing Library (components & actions)
+
+---
+
+## Security Notes
+- Use **Prisma transactions** to prevent race conditions in balance updates
+- Validate/limit amounts server‑side; never trust client input
+- Protect API routes with session checks (`NextAuth`)
+- Log and verify provider callbacks for on‑ramp
+---
+
+
+
