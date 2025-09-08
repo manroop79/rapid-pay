@@ -6,7 +6,6 @@
 ![Prisma](https://img.shields.io/badge/Prisma-ORM-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
 ![Auth](https://img.shields.io/badge/Auth-NextAuth.js-green)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
@@ -16,21 +15,13 @@
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [System Architecture](#system-architecture)
-- [Data Model (ERD)](#data-model-erd)
-- [Project Structure](#project-structure)
-- [Environment Variables](#environment-variables)
 - [Getting Started](#getting-started)
 - [Scripts](#scripts)
 - [Core Flows](#core-flows)
 - [API Reference](#api-reference)
-- [UI & Styling](#ui--styling)
 - [Accessibility & Performance](#accessibility--performance)
 - [Testing](#testing)
 - [Security Notes](#security-notes)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Repo Visibility (Private/Public)](#repo-visibility-privatepublic)
 
 ---
 
