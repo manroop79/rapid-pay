@@ -26,10 +26,6 @@
 - [UI & Styling](#ui--styling)
 - [Accessibility & Performance](#accessibility--performance)
 - [Testing](#testing)
-- [Security Notes](#security-notes)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
 - [Repo Visibility (Private/Public)](#repo-visibility-privatepublic)
 
 ---
