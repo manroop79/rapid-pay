@@ -23,10 +23,9 @@
 - [Scripts](#scripts)
 - [Core Flows](#core-flows)
 - [API Reference](#api-reference)
-- [UI & Styling](#ui--styling)
 - [Accessibility & Performance](#accessibility--performance)
 - [Testing](#testing)
-- [Repo Visibility (Private/Public)](#repo-visibility-privatepublic)
+- [Security Notes](#security-notes)
 
 ---
 
