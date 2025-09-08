@@ -40,10 +40,9 @@ The app is responsive across all screen sizes and uses a clean, minimal design.
 
 > Replace these with real screenshots when ready. Files live under `public/readme/`.
 
-![Dashboard](./public/readme/dashboard.png)
-![Transfer](./public/readme/transfer.png)
-![Transactions](./public/readme/transactions.png)
-
+![Dashboard](./public/readme/rp-1.png)
+![Transfer](./public/readme/rp-2.png)
+![Transactions](./public/readme/rp-3.png)
 ---
 
 ## Features
