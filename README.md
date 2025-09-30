@@ -92,23 +92,22 @@ pnpm install
 
 ### 3) Prisma init & migrate
 ```bash
-pnpm prisma generate
-pnpm prisma migrate dev --name init
-# Optional: pnpm prisma studio
+npm prisma generate
+npm prisma migrate dev --name init
+# Optional: npm prisma studio
 ```
 
-> **Seeding:** You opted not to maintain a `seed.ts`. If needed later, add one under `prisma/seed.ts` and run `pnpm prisma db seed`.
+> **Seeding:** You opted not to maintain a `seed.ts`. If needed later, add one under `prisma/seed.ts` and run `ppm prisma db seed`.
 
 ### 4) Run dev
 ```bash
-pnpm dev
-# open http://localhost:3000
+npm dev
 ```
 
 ### 5) Build & start (production)
 ```bash
-pnpm build
-pnpm start
+npm build
+npm start
 ```
 
 ---
