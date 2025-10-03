@@ -204,6 +204,3 @@ npm start
 - Protect API routes with session checks (`NextAuth`)
 - Log and verify provider callbacks for on‑ramp
 ---
-
-
-

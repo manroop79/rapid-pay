@@ -9,14 +9,15 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id          Int      @id @default(sequence())
+  id          Int      @id @default(autoincrement())
   email       String?  @unique
-  name        String? 
+  name        String?
   password    String
   accounts    Account[]
   sessions    Session[]
@@ -28,7 +29,7 @@ model User {
 
 // Used to manage multiple sign-in methods for users
 model Account {
-  id          Int      @id @default(sequence())
+  id          Int      @id @default(autoincrement())
   userId      Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   provider    String
@@ -47,7 +48,7 @@ model Account {
 
 // Stores session information for users. When a user logs in, a session is created and referenced here.
 model Session {
-  id      Int     @id @default(sequence())
+  id      Int     @id @default(autoincrement())
   sessionToken  String    @unique
   userId  Int
   user    User    @relation(fields: [userId], references: [id])
@@ -64,7 +65,7 @@ model VerificationToken {
 }
 
 model OnRampTransaction {
-  id          Int      @id @default(sequence())
+  id          Int      @id @default(autoincrement())
   status      OnRampStatus
   token       String   @unique
   provider    String
@@ -75,7 +76,7 @@ model OnRampTransaction {
 }
 
 model Balance {
-  id          Int      @id @default(sequence())
+  id          Int      @id @default(autoincrement())
   userId      Int      @unique
   amount      Int
   locked      Int       @default(0)
@@ -83,7 +84,7 @@ model Balance {
 }
 
 model P2PTransfer {
-  id          Int      @id @default(sequence())
+  id          Int      @id @default(autoincrement())
   amount      Float
   timestamp   DateTime @default(now())
   fromUser    User     @relation(name: "Sender", fields: [fromUserId], references: [id])

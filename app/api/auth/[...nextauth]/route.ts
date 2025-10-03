@@ -10,6 +10,8 @@ import NextAuth from "next-auth";
 export const GET = NextAuth(authOptions);
 export const POST = NextAuth(authOptions);
 
+export const runtime = "nodejs";
+
 // async function signUpUser(req: Request) {
 //     const { email, password } = await req.json();
 

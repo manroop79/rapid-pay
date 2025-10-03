@@ -199,7 +199,7 @@ Best-practice encryption and privacy-first design.
 </p>
 </div>
 </div>
-<Button asChild variant="outline" className="sm:self-end">
+<Button asChild variant="outline" className="sm:self-end hover:bg-emerald-800">
 <Link href="/transactions">Review activity</Link>
 </Button>
 </section>
