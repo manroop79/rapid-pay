@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { p2pTransfer } from "@/app/lib/actions/p2ptransfer";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
 try {
 const { name, amount } = await req.json();
